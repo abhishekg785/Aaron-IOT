@@ -9,12 +9,14 @@
 
 import pyaudio  # handles the record and play of the audio files
 import audioop  # lib for handling math operations on the audio file
+import wave
 
 class AudioHandler():
 
     def __init__(self):
         print 'Cons of the AudioHandler Invoked'
         self._audio = pyaudio.PyAudio()
+        self.wave_output_file_name = 'output.wav'
 
     def invokeListener(self, KEYWORD):
         """ Will be used to activate our system to listen for the commands
@@ -47,6 +49,7 @@ class AudioHandler():
         lastN = [i for i in range(30)]
 
         for i in range(0, RATE / CHUNK * THRESHOLD_TIME):
+            print 'for the threshold time'
             data = stream.read(CHUNK)
             frames.append(data)
 
@@ -61,10 +64,13 @@ class AudioHandler():
         isDisturbance = False
 
         for i in range(0, RATE / CHUNK * LISTEN_TIME):
+            print 'for the listen time'
             data = stream.read(CHUNK)
             frames.append(data)
             score = self.getAudioRMS(data)
 
+            print 'score' + str(score)
+            print 'thresh' + str(THRESHOLD)
             if score > THRESHOLD:
                 isDisturbance = True
                 print "Disturbance detected !"
@@ -80,12 +86,22 @@ class AudioHandler():
 
         DELAY_MULTIPLIER = 1
         for i in range(0, RATE / CHUNK * DELAY_MULTIPLIER):
+            print 'for the the extra time'
             data = stream.read(CHUNK)
             frames.append(data)
 
         stream.stop_stream()
         stream.close()
-        return 'Yo!'
+
+        # record the audio file
+        wf = wave.open(self.wave_output_file_name, 'wb')
+        wf.setnchannels(1)
+        wf.setsampwidth(self._audio.get_sample_size(pyaudio.paInt16))
+        wf.setframerate(RATE)
+        wf.writeframes(b''.join(frames))
+        wf.close()
+
+        return True
 
 
     def getAudioRMS(self, data):
