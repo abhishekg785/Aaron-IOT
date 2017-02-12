@@ -14,20 +14,89 @@ class AudioHandler():
 
     def __init__(self):
         print 'Cons of the AudioHandler Invoked'
-        self.pyaudio = pyaudio.PyAudio()
+        self._audio = pyaudio.PyAudio()
 
-    """ invokeListener : Is inoked at the time the user says something.
-    I have to use a keyword to determine whether the user wants to convey
-    a command or not or Simply to activate out system
-    I will be using 'Hiro' keyword for the moment
-
-    How to find whether user has said anything or not
-    Or
-    There is any disturbance by the user or not
-    We can achieve this using a threshold value i.e :
-    """
     def invokeListener(self, KEYWORD):
-        pass
+        """ Will be used to activate our system to listen for the commands
+        when the user says something, in our case it will be a keyword.
+        I will be using 'Hiro' keyword for the moment :P
+
+        :param KEYWORD: The keyword through which the system will get a activated or starts listening for the commands
+        """
+
+        THRESHOLD_MULTIPLIER = 1.8  # will be used to check is user has said something or not
+
+        # pyaudio parameters
+        RATE = 16000
+        CHUNK = 1024
+        LISTEN_TIME = 10    # No of seconds to listen before forcing restart
+
+        THRESHOLD_TIME = 1
+
+        stream = self._audio.open(
+            format = pyaudio.paInt16,
+            channels = 1,
+            rate = RATE,
+            input = True,
+            frames_per_buffer = CHUNK
+        )
+
+        # storing the audio data
+        frames = []
+
+        lastN = [i for i in range(30)]
+
+        for i in range(0, RATE / CHUNK * THRESHOLD_TIME):
+            data = stream.read(CHUNK)
+            frames.append(data)
+
+            lastN.pop(0)
+            lastN.append(self.getAudioRMS(data))
+            average = sum(lastN) / len(lastN)
+
+        THRESHOLD = average * THRESHOLD_MULTIPLIER
+
+        frames = []
+
+        isDisturbance = False
+
+        for i in range(0, RATE / CHUNK * LISTEN_TIME):
+            data = stream.read(CHUNK)
+            frames.append(data)
+            score = self.getAudioRMS(data)
+
+            if score > THRESHOLD:
+                isDisturbance = True
+                print "Disturbance detected !"
+                break
+
+        if not isDisturbance:
+            print "No Disturbance detected"
+            stream.stop_stream()
+            stream.close()
+            return (None, None)
+
+        frames = frames[-20:]
+
+        DELAY_MULTIPLIER = 1
+        for i in range(0, RATE / CHUNK * DELAY_MULTIPLIER):
+            data = stream.read(CHUNK)
+            frames.append(data)
+
+        stream.stop_stream()
+        stream.close()
+        return 'Yo!'
+
+
+    def getAudioRMS(self, data):
+        """Measure of the power in an audio signal
+        :param data: chunk data of the audio file
+        :return: calculated score
+        """
+        rms = audioop.rms(data, 2)
+        score = rms / 3
+        return score
+
 
 
 
