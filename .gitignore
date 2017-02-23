@@ -3,3 +3,9 @@ env/
 
 *.pyc
 .idea/
+
+# facebook bot 
+bot/
+
+# audio files
+output.wav
