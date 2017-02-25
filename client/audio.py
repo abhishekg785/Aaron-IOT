@@ -63,6 +63,7 @@ class AudioHandler():
             lastN.append(self.getAudioRMS(data))
             average = sum(lastN) / len(lastN)
 
+        print lastN
         stream.stop_stream()
         stream.close()
 
@@ -110,6 +111,8 @@ class AudioHandler():
             lastN.pop(0)
             lastN.append(self.getAudioRMS(data))
             average = sum(lastN) / len(lastN)
+
+        print lastN
 
         THRESHOLD = average * THRESHOLD_MULTIPLIER
 
@@ -232,8 +235,9 @@ class AudioHandler():
             print 'average %f', average
             print 'threshold %f', THRESHOLD * 0.8
             if(average < THRESHOLD * 0.8):
-                break;
+                break
 
+        print lastN
         # play another sound here to indicate that it has listened
         self.speak('Yo!')
 
