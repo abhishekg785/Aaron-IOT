@@ -11,6 +11,7 @@ import pyaudio  # handles the record and play of the audio files
 import audioop  # lib for handling math operations on the audio file
 import wave
 import tempfile
+import pyttsx
 
 import json
 import ast
@@ -24,11 +25,11 @@ class AudioHandler():
         self._audio = pyaudio.PyAudio()
         self.wave_output_file_name = 'output.wav'
         self.STTHandler = STTHandler()
+        self.tts = pyttsx.init()
 
 
     def fetchThreshold(self):
 
-        # TODO : Consolidate variables from the next 3 functions
         THRESHOLD_MULTIPLIER = 1.8
         RATE = 16000
         CHUNK = 1024
@@ -183,10 +184,9 @@ class AudioHandler():
         :return:
         """
         text = self.getAllActiveInput(THRESHOLD, LISTEN)
-        if text:
-            return text[0]
+        print text
 
-    def getAllActiveInput(self, THRESHOLD, LISTEN):
+    def getAllActiveInput(self, THRESHOLD = None, LISTEN = True):
         """Records until a seecond of silence or times out after 12 seconds
         Returns a list of matching options or None
         :param THRESHOLD:
@@ -203,6 +203,7 @@ class AudioHandler():
             THRESHOLD = self.fetchThreshold();
 
         # play some audio here to indicate that our system has started listening bro :)
+        self.speak('Yo!')
 
         # recodring stream
         stream = self._audio.open(
@@ -210,10 +211,50 @@ class AudioHandler():
             channels = 1,
             rate = RATE,
             input = True,
+            frames_per_buffer = CHUNK
         )
 
-    def Speak(self, phrase):
-        pass
+        frames = []
+        lastN = [THRESHOLD * 1.2 for i in range(30)]
+
+        for i in range(0, RATE / CHUNK * LISTEN_TIME):
+
+            print 'LISTENING FOR COMMANDS'
+            data = stream.read(CHUNK)
+            frames.append(data)
+            score = self.getAudioRMS(data)
+
+            lastN.pop(0)
+            lastN.append(score)
+
+            average = sum(lastN) / float(len(lastN))
+
+            print 'average %f', average
+            print 'threshold %f', THRESHOLD * 0.8
+            if(average < THRESHOLD * 0.8):
+                break;
+
+        # play another sound here to indicate that it has listened
+        self.speak('Yo!')
+
+        stream.stop_stream()
+        stream.close()
+
+        with tempfile.SpooledTemporaryFile(mode='w+b') as f:
+            wav_fp = wave.open(f, 'wb')
+            wav_fp.setnchannels(1)
+            wav_fp.setsampwidth(pyaudio.get_sample_size(pyaudio.paInt16))
+            wav_fp.setframerate(RATE)
+            wav_fp.writeframes(''.join(frames))
+            wav_fp.close()
+            f.seek(0)
+            text = self.STTHandler.extractTextFromSpeech(f)
+            return text['_text']
+
+
+    def speak(self, phrase):
+        self.tts.say(phrase)
+        self.tts.runAndWait()
 
 
 
