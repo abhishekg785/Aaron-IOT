@@ -15,6 +15,10 @@ class UserInteractionHandler(object):
     def HandleUserInput(self):
 
         while True:
-            obj = self.audioHandler.invokeListener('Hiro')
-            if obj == True:
-                break
+            threshold, text = self.audioHandler.invokeListener('hello')
+            if not text or not threshold:
+            	print 'Nothing has been said'
+            	continue
+            print "keyword '%s' has been said!", text
+            print "starting to listen for the user input command with threshold %f", threshold
+            self.audioHandler.getUserAudioInput(threshold)

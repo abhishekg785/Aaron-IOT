@@ -10,6 +10,12 @@
 import pyaudio  # handles the record and play of the audio files
 import audioop  # lib for handling math operations on the audio file
 import wave
+import tempfile
+
+import json
+import ast
+
+from stt import STTHandler
 
 class AudioHandler():
 
@@ -17,6 +23,53 @@ class AudioHandler():
         print 'Cons of the AudioHandler Invoked'
         self._audio = pyaudio.PyAudio()
         self.wave_output_file_name = 'output.wav'
+        self.STTHandler = STTHandler()
+
+
+    def fetchThreshold(self):
+
+        # TODO : Consolidate variables from the next 3 functions
+        THRESHOLD_MULTIPLIER = 1.8
+        RATE = 16000
+        CHUNK = 1024
+
+        # no of seconds to allow to establish threshold
+        THRESHOLD_TIME = 1
+
+        # recording system
+        stream = self._audio.open(
+            format = pyaudio.paInt16,
+            channels = 1,
+            rate = RATE,
+            input = True,
+            frames_per_buffer = CHUNK
+        )
+
+        # stores the audio data
+        frames = []
+
+        # stores the lastN score values
+        lastN = [i for i in range(20)]
+
+        # calculate the long ,run and average and thereby the proper threshold
+        for i in range(0, RATE / CHUNK * THRESHOLD_TIME):
+
+            data = stream.read(CHUNK)
+            frames.append(data)
+
+            # saves this data point as a source
+            lastN.pop(0)
+            lastN.append(self.getAudioRMS(data))
+            average = sum(lastN) / len(lastN)
+
+        stream.stop_stream()
+        stream.close()
+
+        # this will be set as a limit to cause the disturbance to be over
+        THRESHOLD = average * THRESHOLD_MULTIPLIER
+
+        return THRESHOLD
+
 
     def invokeListener(self, KEYWORD):
         """ Will be used to activate our system to listen for the commands
@@ -93,15 +146,22 @@ class AudioHandler():
         stream.stop_stream()
         stream.close()
 
-        # record the audio file
-        wf = wave.open(self.wave_output_file_name, 'wb')
-        wf.setnchannels(1)
-        wf.setsampwidth(self._audio.get_sample_size(pyaudio.paInt16))
-        wf.setframerate(RATE)
-        wf.writeframes(b''.join(frames))
-        wf.close()
+        with tempfile.NamedTemporaryFile(mode='w+b') as f:
+            wav_fp = wave.open(f, 'wb')
+            wav_fp.setnchannels(1)
+            wav_fp.setsampwidth(pyaudio.get_sample_size(pyaudio.paInt16))
+            wav_fp.setframerate(RATE)
+            wav_fp.writeframes(''.join(frames))
+            wav_fp.close()
+            f.seek(0)
+            text = self.STTHandler.extractTextFromSpeech(f)
 
-        return True
+        text = str(text['_text'])
+        text = text.split(' ')
+        if any(KEYWORD in word for word in text):
+            return (THRESHOLD, KEYWORD)
+
+        return (False, text)
 
 
     def getAudioRMS(self, data):
@@ -113,6 +173,47 @@ class AudioHandler():
         score = rms / 3
         return score
 
+
+    def getUserAudioInput(self, THRESHOLD = None, LISTEN = True):
+        """Listens for the user audio input command
+        Records until a seecond of silence or times out after 12 seconds
+        Returns the first matching string or None
+        :param THRESHOLD:
+        :param LISTEN:
+        :return:
+        """
+        text = self.getAllActiveInput(THRESHOLD, LISTEN)
+        if text:
+            return text[0]
+
+    def getAllActiveInput(self, THRESHOLD, LISTEN):
+        """Records until a seecond of silence or times out after 12 seconds
+        Returns a list of matching options or None
+        :param THRESHOLD:
+        :param LISTEN:
+        :return:
+        """
+
+        RATE = 16000
+        CHUNK = 1024
+        LISTEN_TIME = 12
+
+        # check if no threshold is provided
+        if THRESHOLD is None:
+            THRESHOLD = self.fetchThreshold();
+
+        # play some audio here to indicate that our system has started listening bro :)
+
+        # recodring stream
+        stream = self._audio.open(
+            format = pyaudio.paInt16,
+            channels = 1,
+            rate = RATE,
+            input = True,
+        )
+
+    def Speak(self, phrase):
+        pass
 
 
 

@@ -9,3 +9,6 @@ bot/
 
 # audio files
 output.wav
+
+# config params
+client/config.py
