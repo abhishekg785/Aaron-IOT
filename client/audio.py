@@ -184,7 +184,7 @@ class AudioHandler():
         :return:
         """
         text = self.getAllActiveInput(THRESHOLD, LISTEN)
-        print text
+        return text
 
     def getAllActiveInput(self, THRESHOLD = None, LISTEN = True):
         """Records until a seecond of silence or times out after 12 seconds
@@ -253,7 +253,7 @@ class AudioHandler():
 
 
     def speak(self, phrase):
-        self.tts.say(phrase)
+        self.tts.say(str(phrase))
         self.tts.runAndWait()
 
 

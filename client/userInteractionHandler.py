@@ -21,5 +21,8 @@ class UserInteractionHandler(object):
             	continue
             print "keyword '%s' has been said!", text
             print "starting to listen for the user input command with threshold %f", threshold
-            ram = self.audioHandler.getUserAudioInput(threshold)
-            print ram
+            userInput = self.audioHandler.getUserAudioInput(threshold)
+            if userInput:
+                print userInput
+            else:
+                self.audioHandler.speak('Sorry, but i could not get it!');
