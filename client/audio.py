@@ -252,6 +252,9 @@ class AudioHandler:
             return text['_text']
 
     def speak(self, phrase):
+        """converts the given text or phrase to the speech
+        :param phrase: The text to be converted into speech
+        """
         self.tts.say(str(phrase))
         self.tts.runAndWait()
 

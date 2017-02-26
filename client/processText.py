@@ -22,5 +22,12 @@
 
 class ProcessText:
 
-    def __init__(self):
+    def __init__(self, audio):
+        """
+        Initializes a new ProcessText object , which check the user input against
+        the list of the query modules.
+        Note : The order of the query modules matters as the module which occurs on
+        the top will be executed on validation.
+        :param audio: audio module used to handle user input as well as output
+        """
         pass
