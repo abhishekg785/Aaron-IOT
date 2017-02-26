@@ -11,4 +11,4 @@ bot/
 output.wav
 
 # config params
-client/config.py
+client/config

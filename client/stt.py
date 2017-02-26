@@ -7,7 +7,7 @@
 # i will be using wit.ai api for the speech to text conversion
 
 from wit import Wit
-import config
+from config import config
 
 
 class STTHandler:
@@ -16,7 +16,5 @@ class STTHandler:
         self.client = Wit(access_token=config.ACCESS_TOKEN)
 
     def extractTextFromSpeech(self, f):
-        # with open('yo.wav', 'rb') as f:
         resp = self.client.speech(f, None, {'Content-Type': 'audio/wav'})
-        # print resp['_text']
         return resp

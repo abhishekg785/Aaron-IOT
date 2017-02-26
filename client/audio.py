@@ -21,7 +21,6 @@ class AudioHandler:
     def __init__(self):
         print 'Cons of the AudioHandler Invoked'
         self._audio = pyaudio.PyAudio()
-        self.wave_output_file_name = 'output.wav'
         self.STTHandler = STTHandler()
         self.tts = pyttsx.init()
 

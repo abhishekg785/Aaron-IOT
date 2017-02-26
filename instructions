@@ -1,0 +1,22 @@
+Instructions to follow
+======================
+
+- Indentation
+    Indent code with 4 spaces
+
+- Use camelCase for declaring variables
+i.e for declaring variable like "invoke_listener" use invokeListener
+
+- Proper comment the code
+Multi line comments should be declared using """ """ like
+
+"""
+    this is a simple multi line comments
+    and comments are pretty useful :)
+"""
+
+and single line comments should be done using # symbol like
+
+# this is a simple single line comment
+
+

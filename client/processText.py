@@ -6,6 +6,9 @@
     from sources such as audio, app, web app etc and will take the desired actions
 """
 
+import pkgutil
+from config import path
+
 """
     We will be having modules for out queries eg :  whether module, greeting module, etc.
     steps to process the text :
@@ -17,6 +20,11 @@
     steps for modules:
         - Dynamically load all the modules and set them according to the priorities
         - Search the query against the list of the fetched modules
+
+    module will consist of :
+
+        a handler function to handle the required operation
+        priority for deciding b/w modules
 """
 
 
@@ -30,4 +38,15 @@ class ProcessText:
         the top will be executed on validation.
         :param audio: audio module used to handle user input as well as output
         """
-        pass
+        self.queryModules = self.loadQueryModules();
+
+    @classmethod
+    def loadQueryModules(cls):
+        """
+        Dynamically loads all the query modules in the query module folder
+        and sorts them according to their priority orders. If no priority is
+        defined for a given module, a priority 0 is defined
+        """
+        queryModulesPath = path.QUERY_MODULES_PATH
+        print "loading modules from the path %s", queryModulesPath
+        sortedQueryModules = []     # array containing
