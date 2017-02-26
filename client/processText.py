@@ -71,10 +71,10 @@ class ProcessText:
         :return:
         """
         textArr = text.split(' ')
+        print textArr
         for module in self.queryModules:
-            for text in textArr:
-                if module.isValid(text):
-                    print "the matching module found! ", module
+            if module.isValid(text):
+                print "the matching module found! ", module
                 try:
                     module.handle(text, self.audio)
                 except Exception:
@@ -85,5 +85,6 @@ class ProcessText:
                 finally:
                     return
         print 'No module could take the action !'
+        self.audio.speak('I am still a child! I have to learn a lot of things. The next time i will surely have an answer')
 
 

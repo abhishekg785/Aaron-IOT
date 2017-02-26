@@ -1,7 +1,7 @@
 import re
 
 # process more
-def sample_module(text, audio):
+def greeting_module(text, audio):
     pass
 
 

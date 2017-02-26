@@ -22,7 +22,6 @@ class AudioHandler:
         print 'Cons of the AudioHandler Invoked'
         self._audio = pyaudio.PyAudio()
         self.STTHandler = STTHandler()
-        self.tts = pyttsx.init()
 
     def fetchThreshold(self):
 
@@ -248,14 +247,17 @@ class AudioHandler:
             wav_fp.close()
             f.seek(0)
             text = self.STTHandler.extractTextFromSpeech(f)
+            print text
             return text['_text']
 
     def speak(self, phrase):
         """converts the given text or phrase to the speech
         :param phrase: The text to be converted into speech
         """
-        self.tts.say(str(phrase))
-        self.tts.runAndWait()
+        tts = pyttsx.init()
+        tts.say(str(phrase))
+        tts.runAndWait()
+
 
 
 
