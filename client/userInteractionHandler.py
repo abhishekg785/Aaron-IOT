@@ -6,11 +6,13 @@
 """
 
 from audio import AudioHandler
+from processText import ProcessText
 
 class UserInteractionHandler(object):
 
     def __init__(self):
         self.audioHandler = AudioHandler()
+        self.processText = ProcessText(self.audioHandler)
 
     def HandleUserInput(self):
 
@@ -24,5 +26,6 @@ class UserInteractionHandler(object):
             userInput = self.audioHandler.getUserAudioInput(threshold)
             if userInput:
                 print userInput
+                self.processText.parseText(userInput)
             else:
                 self.audioHandler.speak('Sorry, but i could not get it!');

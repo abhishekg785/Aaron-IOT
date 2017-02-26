@@ -6,7 +6,7 @@
     from sources such as audio, app, web app etc and will take the desired actions
 """
 
-import pkgutil
+import pkgutil      # for loading and unloading the packages, query modules in our case
 from config import path
 
 """
@@ -36,9 +36,11 @@ class ProcessText:
         the list of the query modules.
         Note : The order of the query modules matters as the module which occurs on
         the top will be executed on validation.
+
         :param audio: audio module used to handle user input as well as output
         """
-        self.queryModules = self.loadQueryModules();
+        self.queryModules = self.loadQueryModules()
+        self.audio = audio
 
     @classmethod
     def loadQueryModules(cls):
@@ -49,4 +51,39 @@ class ProcessText:
         """
         queryModulesPath = path.QUERY_MODULES_PATH
         print "loading modules from the path %s", queryModulesPath
-        sortedQueryModules = []     # array containing
+        locations = [queryModulesPath]
+        sortedQueryModules = []     # array containing the fetched query modules
+        for finder, name, ispkg in pkgutil.walk_packages(locations):
+            try:
+                loader = finder.find_module(name)
+                mod = loader.load_module(name)
+                sortedQueryModules.append(mod)
+            except:
+                print 'Error in loading the module ' + name
+        sortedQueryModules.sort(key = lambda mod: mod.PRIORITY if hasattr(mod, 'PRIORITY') else 0, reverse = True)
+        return sortedQueryModules
+
+    def parseText(self, text):
+        """Parses the user input to the appropriate query module,
+        testing it against the each module isValid function
+
+        :param text: The user input
+        :return:
+        """
+        textArr = text.split(' ')
+        for module in self.queryModules:
+            for text in textArr:
+                if module.isValid(text):
+                    print "the matching module found! ", module
+                try:
+                    module.handle(text, self.audio)
+                except Exception:
+                    print "Failed to execute module"
+                    self.audio.speak('I am sorry! I could not take the actions, Try again after some time!')
+                else:
+                    print 'handling of the query by the module %s done !', module
+                finally:
+                    return
+        print 'No module could take the action !'
+
+
