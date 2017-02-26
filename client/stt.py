@@ -9,15 +9,14 @@
 from wit import Wit
 import config
 
-class STTHandler():
 
-	def __init__(self):
-		print 'In the sttHandler class cons'
-		self.client = Wit(access_token = config.ACCESS_TOKEN)
+class STTHandler:
+    def __init__(self):
+        print "In the sttHandler class cons"
+        self.client = Wit(access_token=config.ACCESS_TOKEN)
 
-	def extractTextFromSpeech(self, f):
-		# with open('yo.wav', 'rb') as f:
-  		resp = self.client.speech(f, None, {'Content-Type': 'audio/wav'})
-		# print resp['_text']
-		return resp
-
+    def extractTextFromSpeech(self, f):
+        # with open('yo.wav', 'rb') as f:
+        resp = self.client.speech(f, None, {'Content-Type': 'audio/wav'})
+        # print resp['_text']
+        return resp

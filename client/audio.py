@@ -13,12 +13,10 @@ import wave
 import tempfile
 import pyttsx
 
-import json
-import ast
-
 from stt import STTHandler
 
-class AudioHandler():
+
+class AudioHandler:
 
     def __init__(self):
         print 'Cons of the AudioHandler Invoked'
@@ -26,7 +24,6 @@ class AudioHandler():
         self.wave_output_file_name = 'output.wav'
         self.STTHandler = STTHandler()
         self.tts = pyttsx.init()
-
 
     def fetchThreshold(self):
 
@@ -71,7 +68,6 @@ class AudioHandler():
         THRESHOLD = average * THRESHOLD_MULTIPLIER
 
         return THRESHOLD
-
 
     def invokeListener(self, KEYWORD):
         """ Will be used to activate our system to listen for the commands
@@ -150,6 +146,7 @@ class AudioHandler():
         stream.stop_stream()
         stream.close()
 
+        # temporary file storage and finding the text in the audio file usig wit.ai cool!
         with tempfile.NamedTemporaryFile(mode='w+b') as f:
             wav_fp = wave.open(f, 'wb')
             wav_fp.setnchannels(1)
@@ -159,6 +156,7 @@ class AudioHandler():
             wav_fp.close()
             f.seek(0)
             text = self.STTHandler.extractTextFromSpeech(f)
+            print text
 
         text = str(text['_text'])
         text = text.split(' ')
@@ -166,7 +164,6 @@ class AudioHandler():
             return (THRESHOLD, KEYWORD)
 
         return (False, text)
-
 
     def getAudioRMS(self, data):
         """Measure of the power in an audio signal
@@ -177,24 +174,23 @@ class AudioHandler():
         score = rms / 3
         return score
 
-
     def getUserAudioInput(self, THRESHOLD = None, LISTEN = True):
         """Listens for the user audio input command
         Records until a seecond of silence or times out after 12 seconds
         Returns the first matching string or None
-        :param THRESHOLD:
-        :param LISTEN:
-        :return:
+        :param THRESHOLD: The limit over which the disturbance occurs
+        :param LISTEN: to listen or not
+        :return: Speech converted to text using STTHandler module
         """
         text = self.getAllActiveInput(THRESHOLD, LISTEN)
         return text
 
     def getAllActiveInput(self, THRESHOLD = None, LISTEN = True):
-        """Records until a seecond of silence or times out after 12 seconds
+        """Record the user audio input and times out after 12 seconds
         Returns a list of matching options or None
-        :param THRESHOLD:
-        :param LISTEN:
-        :return:
+        :param THRESHOLD: The limit over which the disturbance occurs
+        :param LISTEN: to listen or not
+        :return: Speech converted to text using STTHandler module
         """
 
         RATE = 16000
@@ -254,7 +250,6 @@ class AudioHandler():
             f.seek(0)
             text = self.STTHandler.extractTextFromSpeech(f)
             return text['_text']
-
 
     def speak(self, phrase):
         self.tts.say(str(phrase))
