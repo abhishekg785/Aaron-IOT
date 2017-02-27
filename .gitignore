@@ -12,3 +12,6 @@ output.wav
 
 # config params
 client/config
+
+# server files
+server/flask-env
