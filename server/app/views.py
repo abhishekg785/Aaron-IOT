@@ -4,7 +4,6 @@
 
     views.py : handling the routes
 """
-
 from app import app
 
 import sys
@@ -25,7 +24,6 @@ parser = ProcessText(audio)
 @app.route('/index')
 def index():
     return 'hello world'
-
 
 # Route for handling the user query received through the url
 @app.route('/parser/<text>')
