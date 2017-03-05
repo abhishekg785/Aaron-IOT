@@ -23,7 +23,7 @@ parser = ProcessText(audio)
 @app.route('/')
 @app.route('/index')
 def index():
-    return 'hello world'
+    return 'This is the server for the Hiro project running on the port 8000! Yay!'
 
 
 # Route for handling the user query received through the url
@@ -34,12 +34,19 @@ def parseText(text):
 
 
 # api for handling post request of the user query
+# /api/v0.1/parse-query
 @app.route('/api/v0.1/parse-query', methods = ['POST'])
 def parseAPI():
     queryText = request.form['query']
     parser.parseText(queryText)
     return 'Yo!'
 
+
 @app.route('/demos/sample')
 def sample():
     return render_template('sample.html')
+
+
+@app.route('/demos/client')
+def clientDemo():
+    return render_template('clientDemo.html')

@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title>A simple client Demo</title>
+</head>
+<body>
+<form id = 'queryForm'>
+    Server Url : <input type = 'text' id = 'serverURL' name = 'serverURL' /><br/>
+    Query Text : <input type = 'text' id = 'query' name = 'query' /><br/>
+    <input type = 'submit' id = 'submit' value = 'Go!' />
+</form>
+<div id = 'result'>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+    (function(d, w, $w, $d) {
+    	var $Objects = {};
+
+    	_Functions = {
+    		postData : function(url, query) {
+    			var postData = {
+    				'query' : query
+    			}
+    			$.ajax({
+    				url : url,
+    				type : 'POST',
+    				data : postData,
+    				success : function(data) {
+    					console.log(data);
+    					$Objects.result.text('Success!');
+    				},
+    				error : function(error) {
+    					console.log(error);
+    					$Objects.result.text('Error! Try Again!');
+    				}
+    			});
+    		}
+    	}
+
+    	$d.ready(function() {
+    		$Objects.form = $('#queryForm');
+    		$Objects.serverURL = $('#serverURL');
+    		$Objects.query = $('#query');
+    		$Objects.submit = $('#submit');
+    		$Objects.result = $('#result');
+
+    		$Objects.form.on('submit', function(e) {
+    			e.preventDefault();
+    			var serverURL = $Objects.serverURL.val(),
+    				query = $Objects.query.val();
+    				_Functions.postData(serverURL, query);
+    		});
+    	});
+    })(document, window, jQuery(window), jQuery(document));
+</script>
+</body>
+</html>
