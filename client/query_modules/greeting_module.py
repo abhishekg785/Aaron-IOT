@@ -1,8 +1,6 @@
-import re
+# A simple greeting handler for the user
 
-# process more
-def greeting_module(text, audio):
-    pass
+import re
 
 
 # take necessary actions
@@ -18,4 +16,4 @@ def isValid(text):
     :param text: The input text to validate
     :return: Bool
     """
-    return bool(re.search(r'\bhow are you\b', text, re.IGNORECASE))
+    return bool(re.search(r'\bhow are you|wassup\b', text, re.IGNORECASE))
