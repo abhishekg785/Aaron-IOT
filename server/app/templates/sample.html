@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>A simple post request to the PARSER to out python</title>
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        var data = {
+            'query' : 'fuck you hiro'
+        }
+        $.ajax({
+            url : 'http://localhost:3000/api/v0.1/parse-query',
+            type : 'POST',
+            data : data,
+            success : function(data) {
+                console.log(data);
+            },
+            error : function(error) {
+                console.log(error);
+            }
+        });
+    </script>
+</body>
+</html>
