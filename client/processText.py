@@ -77,8 +77,8 @@ class ProcessText:
                 print "the matching module found! ", module
                 try:
                     module.handle(text, self.audio)
-                except Exception:
-                    print "Failed to execute module"
+                except Exception as err:
+                    print err
                     self.audio.speak('I am sorry! I could not take the actions, Try again after some time!')
                 else:
                     print 'handling of the query by the module %s done !', module
