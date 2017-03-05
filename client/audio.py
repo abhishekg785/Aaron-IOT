@@ -200,7 +200,7 @@ class AudioHandler:
             THRESHOLD = self.fetchThreshold();
 
         # play some audio here to indicate that our system has started listening bro :)
-        self.speak('Yo!')
+        self.speak('Give your command')
 
         # recodring stream
         stream = self._audio.open(
@@ -233,7 +233,7 @@ class AudioHandler:
 
         print lastN
         # play another sound here to indicate that it has listened
-        self.speak('Yo!')
+        self.speak('Processing your request!')
 
         stream.stop_stream()
         stream.close()
