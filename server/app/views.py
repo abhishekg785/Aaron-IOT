@@ -26,11 +26,25 @@ def index():
     return 'This is the server for the Hiro project running on the port 8000! Yay!'
 
 
+# @app.route('/addMessage', methods = ['POST'])
+# def messageHandler():
+#     queryText = request.json['text']
+#     parser.parseText(queryText)
+#     return 'yo!'
+
+
 # Route for handling the user query received through the url
 @app.route('/parser/<text>')
 def parseText(text):
     parser.parseText(text)
     return 'yo!'
+
+
+@app.route('/addMessage', methods = ['POST'])
+def messageHandler():
+    queryText = request.json['text']
+    parser.parseText(queryText)
+    return 'Yo!'
 
 
 # api for handling post request of the user query
