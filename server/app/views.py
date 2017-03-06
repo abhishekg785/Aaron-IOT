@@ -12,12 +12,13 @@ import sys
 sys.path.append('/home/hiro/Documents/hiro/client/')
 
 # getting the modules required for processing the query
-from audio import AudioHandler
+# from audio import AudioHandler
 from processText import ProcessText
 
 # Instantiate
-audio = AudioHandler()
-parser = ProcessText(audio)
+# audio = AudioHandler()
+# parser = ProcessText(audio)
+parser = ProcessText()
 
 
 @app.route('/')
@@ -25,12 +26,6 @@ parser = ProcessText(audio)
 def index():
     return 'This is the server for the Hiro project running on the port 8000! Yay!'
 
-
-# @app.route('/addMessage', methods = ['POST'])
-# def messageHandler():
-#     queryText = request.json['text']
-#     parser.parseText(queryText)
-#     return 'yo!'
 
 
 # Route for handling the user query received through the url
