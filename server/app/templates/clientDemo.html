@@ -31,7 +31,8 @@
     			$.ajax({
     				url : url,
     				type : 'POST',
-    				data : postData,
+    				data : JSON.stringify(postData),
+                    contentType: "application/json; charset=utf-8",
     				success : function(data) {
     					console.log(data);
     					$Objects.result.text('Success!');

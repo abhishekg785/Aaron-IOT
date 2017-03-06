@@ -6,12 +6,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
         var data = {
-            'query' : 'sample'
+            query : 'sample'
         }
         $.ajax({
-            url : 'http://localhost:8000/api/v0.1/parse-query',
+            url : 'https://c424f52b.ngrok.io/api/v0.1/parse-query',
             type : 'POST',
-            data : data,
+            data : JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
             success : function(data) {
                 console.log(data);
             },

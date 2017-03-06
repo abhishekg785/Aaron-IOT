@@ -37,7 +37,7 @@ def parseText(text):
 # /api/v0.1/parse-query
 @app.route('/api/v0.1/parse-query', methods = ['POST'])
 def parseAPI():
-    queryText = request.form['query']
+    queryText = request.json['query']
     parser.parseText(queryText)
     return 'Yo!'
 
