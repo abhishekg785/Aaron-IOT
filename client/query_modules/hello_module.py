@@ -13,4 +13,4 @@ def handle(text, audio):
 
 # validate the module for the text from the source ( user, server, bot etc )
 def isValid(text):
-    return bool(re.search(r'\bhi|hello|yo\b', text, re.IGNORECASE))
+    return bool(re.search(r'\bhi|hello|yo|hey there|hey\b', text, re.IGNORECASE))

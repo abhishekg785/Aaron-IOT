@@ -12,13 +12,13 @@ import sys
 sys.path.append('/home/hiro/Documents/hiro/client/')
 
 # getting the modules required for processing the query
-# from audio import AudioHandler
+from audio import AudioHandler
 from processText import ProcessText
 
 # Instantiate
-# audio = AudioHandler()
-# parser = ProcessText(audio)
-parser = ProcessText()
+audio = AudioHandler()
+parser = ProcessText(audio)
+# parser = ProcessText()
 
 
 @app.route('/')

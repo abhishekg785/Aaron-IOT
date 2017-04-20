@@ -30,8 +30,7 @@ from config import path
 
 class ProcessText:
 
-    # def __init__(self, audio):
-    def __init__(self):
+    def __init__(self, audio):
         """
         Initializes a new ProcessText object , which check the user input against
         the list of the query modules.
@@ -41,7 +40,7 @@ class ProcessText:
         :param audio: audio module used to handle user input as well as output
         """
         self.queryModules = self.loadQueryModules()
-        # self.audio = audio
+        self.audio = audio
 
     @classmethod
     def loadQueryModules(cls):

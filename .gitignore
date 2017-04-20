@@ -4,7 +4,7 @@ env/
 *.pyc
 .idea/
 
-# facebook bot 
+# facebook bot
 bot/
 
 # audio files
@@ -12,3 +12,4 @@ output.wav
 
 # config params
 client/config
+server/app/config
