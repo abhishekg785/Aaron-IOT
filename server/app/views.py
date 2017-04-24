@@ -13,11 +13,6 @@ import json
 from watson_developer_cloud import ToneAnalyzerV3
 from config import WATSON_API
 
-#authenticate the application 
-tone_analyzer = ToneAnalyzerV3(
-    username = WATSON_API.TONE_ANALYZER_USERNAME,
-    password = WATSON_API.TONE_ANALYZER_PASSWORD,
-    version='2016-05-19 ')
 
 # adding client to the sys path to get the modules available here
 sys.path.append('/home/hiro/Documents/hiro/client/')
@@ -25,11 +20,13 @@ sys.path.append('/home/hiro/Documents/hiro/client/')
 # getting the modules required for processing the query
 from audio import AudioHandler
 from processText import ProcessText
+#getting watson functions
+from watson import WatsonAPI
 
 # Instantiate
 audio = AudioHandler()
 parser = ProcessText(audio)
-# parser = ProcessText()
+watson_api = WatsonAPI()
 
 
 @app.route('/')
@@ -74,16 +71,20 @@ def watson_tone_analyzer():
         query_text = request.form['text']
         print 'FETCHING DATA FOR THE TEXT'
         print query_text
+        query_text = query_text.strip()
         print '=========================================================='
-        print(json.dumps(tone_analyzer.tone(text = query_text), indent=2))
+        watson_api.tone_analyzer_api(query_text)
     return render_template('watson_demo.html')
 
 
 # api using watson natural language api
 @app.route('/api/v0.1/watson/natural_language', methods = ['GET', 'POST'])
 def watson_natural_language():
-    print request.method
-    return 'you are using watson natural language api'
+    if request.method == 'POST':
+        query_text = request.form['text']
+        query_text = query_text.strip()
+        print query_text
+    return render_template('watson_natural_demo.html')
 
 
 @app.route('/demos/client')
