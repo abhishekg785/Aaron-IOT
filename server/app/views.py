@@ -8,6 +8,17 @@ from app import app
 
 import sys
 
+# watson api
+import json
+from watson_developer_cloud import ToneAnalyzerV3
+from config import WATSON_API
+
+#authenticate the application 
+tone_analyzer = ToneAnalyzerV3(
+    username = WATSON_API.TONE_ANALYZER_USERNAME,
+    password = WATSON_API.TONE_ANALYZER_PASSWORD,
+    version='2016-05-19 ')
+
 # adding client to the sys path to get the modules available here
 sys.path.append('/home/hiro/Documents/hiro/client/')
 
@@ -54,6 +65,25 @@ def parseAPI():
 @app.route('/demos/sample')
 def sample():
     return render_template('sample.html')
+
+
+# api using watson tone analyzer api
+@app.route('/api/v0.1/watson/tone_analyzer', methods = ['GET', 'POST'])
+def watson_tone_analyzer():
+    if request. method == 'POST':
+        query_text = request.form['text']
+        print 'FETCHING DATA FOR THE TEXT'
+        print query_text
+        print '=========================================================='
+        print(json.dumps(tone_analyzer.tone(text = query_text), indent=2))
+    return render_template('watson_demo.html')
+
+
+# api using watson natural language api
+@app.route('/api/v0.1/watson/natural_language', methods = ['GET', 'POST'])
+def watson_natural_language():
+    print request.method
+    return 'you are using watson natural language api'
 
 
 @app.route('/demos/client')
