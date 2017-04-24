@@ -2,6 +2,7 @@
 
 import re
 
+# PRIORITY = 2
 
 # take necessary actions
 def handle(text, audio):

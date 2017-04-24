@@ -35,7 +35,6 @@ def index():
     return 'This is the server for the Hiro project running on the port 8000! Yay!'
 
 
-
 # Route for handling the user query received through the url
 @app.route('/parser/<text>')
 def parseText(text):
