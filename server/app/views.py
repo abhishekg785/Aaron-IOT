@@ -7,15 +7,16 @@ from flask import render_template, request
 from app import app
 
 import sys
+import os
 
 # watson api
 import json
 from watson_developer_cloud import ToneAnalyzerV3
 from config import WATSON_API
 
-
 # adding client to the sys path to get the modules available here
-sys.path.append('/home/hiro/Documents/hiro/client/')
+CLIENT_PATH = os.path.normpath(os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir), os.pardir))
+sys.path.append(CLIENT_PATH + '/client/')
 
 # getting the modules required for processing the query
 from audio import AudioHandler

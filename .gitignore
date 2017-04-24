@@ -13,3 +13,6 @@ output.wav
 # config params
 client/config
 server/app/config
+
+#music files
+client/music/

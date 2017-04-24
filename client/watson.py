@@ -33,11 +33,12 @@ class WatsonAPI:
 			tone_score_arr.append(tone_score)
 			tone_id_arr.append(tone_id)
 		print tone_name_arr
-		print tone_score_arr
+		# print tone_score_arr
 		max_tone_score = max(tone_score_arr)
 		predicted_tone_index = tone_score_arr.index(max_tone_score)
 		predicted_tone = tone_name_arr[predicted_tone_index]
 		print predicted_tone
+		return predicted_tone
 
 
 	def natural_language_api(self):

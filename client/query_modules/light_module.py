@@ -2,7 +2,6 @@
 
 import re
 
-
 def handle(text, audio):
     """This function has to handle the turning on or off the lights
     If the lights are turned on , then turn off should occur and vise versa
