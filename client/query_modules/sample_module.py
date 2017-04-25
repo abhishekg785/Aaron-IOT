@@ -1,11 +1,6 @@
 # sample_module.py : a demo module
 import re
 
-# process more
-def sample_module(text, audio):
-    pass
-
-
 # take necessary actions
 def handle(text, audio):
     print 'Handling sample module'

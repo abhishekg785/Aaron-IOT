@@ -73,7 +73,8 @@ def watson_tone_analyzer():
         print query_text
         query_text = query_text.strip()
         print '=========================================================='
-        watson_api.tone_analyzer_api(query_text)
+        user_tone = watson_api.tone_analyzer_api(query_text)
+        print user_tone
     return render_template('watson_demo.html')
 
 

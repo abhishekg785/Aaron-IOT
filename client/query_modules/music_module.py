@@ -41,4 +41,4 @@ def handle(text, audio):
 
 # validate the module for the text from the source ( user, server, bot etc )
 def isValid(text):
-    return bool(re.search(r'\bmusic|melod|song|\b', text, re.IGNORECASE))
+    return bool(re.search(r'\bmusic|melod|song|songs|tune\b', text, re.IGNORECASE))
