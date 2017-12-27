@@ -3,6 +3,17 @@ Smart AI assistant
 
 Aaron is a smart IOT based home assistant which can be controlled using voice commands and let you to control your home appliances.
 
-It can learn new commands and can be programmed to perform actions.
+It can learn new skills and can be programmed to perform actions.
 
-It is still under development and i will adding AI to Aaron.
+It is still under development and i will be adding AI to Aaron ( Currently you have to create the skill )
+
+Hardware
+--------
+
+I used Raspberry PI and created a relay circuit in order to control the eletrical appliances.
+
+Other
+-----
+
+Created a Facebook Bot too, which was connected to the backend service of the aaron-iot and 
+could be used to control electrical appliances.
